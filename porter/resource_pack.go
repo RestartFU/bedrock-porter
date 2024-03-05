@@ -91,7 +91,7 @@ func (r *ResourcePack) Port() {
 	}
 	_ = r.portSingleTexture("pack.png", "pack_icon.png")
 	_ = r.portSingleTexture(r.texturesPath+"/particle/particles.png", "textures/particle/particles.png")
-	//_ = r.portSingleTexture(r.texturesPath+"/gui/icons.png", "textures/gui/icons.png")
+	_ = r.portSingleTexture(r.texturesPath+"/gui/icons.png", "textures/gui/icons.png")
 
 	r.portTextures("textures/items", r.items, ignoreNone)
 	r.portTextures("textures/blocks", r.blocks, ignoreNone)
