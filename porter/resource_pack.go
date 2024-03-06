@@ -58,17 +58,17 @@ func NewResourcePack(path string) (*ResourcePack, error) {
 	}
 	rp.texturesPath = textures
 
-	items, err := rp.resolveDirectoryTextures("items")
+	items, err := rp.resolveDirectoryTextures("items", true)
 	if err != nil {
 		return nil, err
 	}
 
-	blocks, err := rp.resolveDirectoryTextures("blocks")
+	blocks, err := rp.resolveDirectoryTextures("blocks", false)
 	if err != nil {
 		return nil, err
 	}
 
-	armor, err := rp.resolveDirectoryTextures("models/armor")
+	armor, err := rp.resolveDirectoryTextures("models/armor", false)
 	if err != nil {
 		return nil, err
 	}
@@ -89,9 +89,9 @@ func (r *ResourcePack) Port() {
 		fmt.Println(err)
 
 	}
-	_ = r.portSingleTexture("pack.png", "pack_icon.png")
-	_ = r.portSingleTexture(r.texturesPath+"/particle/particles.png", "textures/particle/particles.png")
-	_ = r.portSingleTexture(r.texturesPath+"/gui/icons.png", "textures/gui/icons.png")
+	_ = r.portSingleTexture("pack.png", "pack_icon.png", false)
+	_ = r.portSingleTexture(r.texturesPath+"/particle/particles.png", "textures/particle/particles.png", false)
+	_ = r.portSingleTexture(r.texturesPath+"/gui/icons.png", "textures/gui/icons.png", true)
 
 	r.portTextures("textures/items", r.items, ignoreNone)
 	r.portTextures("textures/blocks", r.blocks, ignoreNone)
@@ -138,7 +138,7 @@ func (r *ResourcePack) portTextures(path string, textures []*Texture, ignore fun
 }
 
 // Texture represents a Minecraft texture.
-func (r *ResourcePack) resolveDirectoryTextures(path string) ([]*Texture, error) {
+func (r *ResourcePack) resolveDirectoryTextures(path string, alphaFix bool) ([]*Texture, error) {
 	var textures []*Texture
 
 	err := fs.WalkDir(r, r.texturesPath+"/"+path, func(path string, d fs.DirEntry, err error) error {
@@ -159,7 +159,7 @@ func (r *ResourcePack) resolveDirectoryTextures(path string) ([]*Texture, error)
 			return err
 		}
 
-		texture, err := NewTexture(d.Name(), reader)
+		texture, err := NewTexture(d.Name(), reader, alphaFix)
 		if err != nil {
 			return err
 		}
@@ -172,13 +172,13 @@ func (r *ResourcePack) resolveDirectoryTextures(path string) ([]*Texture, error)
 }
 
 // portSingleTexture resolves the icon of the resource pack.
-func (r *ResourcePack) portSingleTexture(path, newPath string) error {
+func (r *ResourcePack) portSingleTexture(path, newPath string, alphaFix bool) error {
 	reader, err := r.Open(path)
 	if err != nil {
 		return err
 	}
 
-	icon, err := NewTexture(path, reader)
+	icon, err := NewTexture(path, reader, alphaFix)
 	if err != nil {
 		return err
 	}

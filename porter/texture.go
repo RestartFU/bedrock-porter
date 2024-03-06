@@ -17,7 +17,7 @@ type Texture struct {
 }
 
 // NewTexture creates a new Texture from a name and reader.
-func NewTexture(name string, reader io.Reader) (*Texture, error) {
+func NewTexture(name string, reader io.Reader, alphaFix bool) (*Texture, error) {
 	buf, err := io.ReadAll(reader)
 	if err != nil {
 		return nil, err
@@ -28,8 +28,12 @@ func NewTexture(name string, reader io.Reader) (*Texture, error) {
 		return nil, err
 	}
 
+	if alphaFix {
+		img = fixAlpha(img)
+	}
+
 	t := &Texture{
-		Image: fixAlpha(img),
+		Image: img,
 		name:  name,
 	}
 	return t, nil
