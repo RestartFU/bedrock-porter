@@ -95,7 +95,7 @@ func (r *ResourcePack) Port() {
 
 	r.portTextures("textures/items", r.items, ignoreNone)
 	r.portTextures("textures/blocks", r.blocks, ignoreNone)
-	r.portTextures("textures/armor", r.armor, func(s string) bool {
+	r.portTextures("textures/models/armor", r.armor, func(s string) bool {
 		return strings.Contains(s, "overlay")
 	})
 
