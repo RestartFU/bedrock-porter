@@ -16,6 +16,7 @@ func main() {
 		return
 	}
 	path = strings.TrimSpace(path)
+	path = strings.ReplaceAll(path, "\"", "")
 
 	fmt.Print(frontend.ClearTerminal, frontend.CursorUp, frontend.CursorUp)
 	fmt.Print(frontend.Style.Render(fmt.Sprintf(" Porting %s...\n", path)))
